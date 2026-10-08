@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eden · 一个人的工作台</title>
+<meta name="description" content="投资、阅读、AI 与内容创作。记录那些值得长期做的事。">
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --bg-soft: #ffffff;
+    --text: #16181d;
+    --text-2: #5a5f6b;
+    --text-3: #8b909c;
+    --line: #e5e5e1;
+    --accent: #2f6df6;
+    --accent-soft: #e8effd;
+    --shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06);
+    --radius: 16px;
+  }
+  html[data-theme="dark"] {
+    --bg: #0d0f13;
+    --bg-soft: #15181e;
+    --text: #f0f1f4;
+    --text-2: #a2a8b4;
+    --text-3: #6f7684;
+    --line: #262a33;
+    --accent: #6c9bff;
+    --accent-soft: #1b2434;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "PingFang SC", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    transition: background .35s ease, color .35s ease;
+  }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 860px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-weight: 700; font-size: 15px; letter-spacing: .01em; }
+  .brand span { color: var(--accent); }
+  .nav-links { display: flex; align-items: center; gap: 22px; }
+  .nav-links a {
+    color: var(--text-2); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .toggle {
+    width: 34px; height: 34px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--bg-soft);
+    color: var(--text-2); cursor: pointer; font-size: 15px;
+    display: grid; place-items: center;
+    transition: transform .2s, color .2s, border-color .2s;
+  }
+  .toggle:hover { transform: rotate(-18deg); color: var(--accent); border-color: var(--accent); }
+
+  /* ---------- hero ---------- */
+  header.hero { padding: 92px 0 56px; }
+  .avatar {
+    width: 76px; height: 76px; border-radius: 50%;
+    background: linear-gradient(135deg, #2f6df6, #7aa7ff 55%, #b9d0ff);
+    display: grid; place-items: center;
+    color: #fff; font-size: 30px; font-weight: 700;
+    box-shadow: 0 10px 30px rgba(47,109,246,.28);
+    margin-bottom: 26px;
+  }
+  h1 {
+    font-size: clamp(30px, 5.6vw, 46px);
+    line-height: 1.22; font-weight: 700; letter-spacing: -.02em;
+    margin-bottom: 16px;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lead { font-size: 17px; color: var(--text-2); max-width: 560px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+  .tag {
+    font-size: 13px; padding: 5px 12px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  /* ---------- stats ---------- */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--line); border: 1px solid var(--line);
+    border-radius: var(--radius); overflow: hidden;
+    margin: 48px 0 72px;
+  }
+  .stat { background: var(--bg-soft); padding: 22px 18px; }
+  .stat b { display: block; font-size: 24px; letter-spacing: -.02em; }
+  .stat small { color: var(--text-3); font-size: 12.5px; }
+
+  /* ---------- section ---------- */
+  section { padding: 8px 0 72px; }
+  .sec-title {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 26px;
+  }
+  .sec-title h2 { font-size: 20px; font-weight: 650; letter-spacing: -.01em; }
+  .sec-title i {
+    font-style: normal; font-size: 13px; color: var(--text-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .card {
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 22px;
+    box-shadow: var(--shadow);
+    transition: transform .25s cubic-bezier(.2,.7,.3,1), border-color .25s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+  .card .ico { font-size: 19px; margin-bottom: 10px; display: block; }
+  .card h3 { font-size: 15.5px; font-weight: 650; margin-bottom: 6px; }
+  .card p { font-size: 14px; color: var(--text-2); }
+
+  /* ---------- list ---------- */
+  .list { border-top: 1px solid var(--line); }
+  .row {
+    display: flex; align-items: flex-start; gap: 18px;
+    padding: 18px 4px; border-bottom: 1px solid var(--line);
+  }
+  .row time {
+    flex: 0 0 84px; font-size: 13px; color: var(--text-3);
+    font-variant-numeric: tabular-nums; padding-top: 2px;
+  }
+  .row .body h4 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .row .body p { font-size: 13.5px; color: var(--text-2); }
+
+  /* ---------- quote ---------- */
+  blockquote {
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 20px; margin: 8px 0 72px;
+    font-size: 16px; color: var(--text-2); font-style: italic;
+  }
+  blockquote footer { font-style: normal; font-size: 13px; color: var(--text-3); margin-top: 8px; }
+
+  /* ---------- footer ---------- */
+  footer.site {
+    border-top: 1px solid var(--line);
+    padding: 30px 0 46px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-3);
+  }
+  footer.site a { color: var(--text-2); text-decoration: none; border-bottom: 1px solid var(--line); }
+  footer.site a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ---------- reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(18px); }
+  .reveal.in {
+    opacity: 1; transform: none;
+    transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);
+  }
+
+  @media (max-width: 640px) {
+    .nav-links a { display: none; }
+    header.hero { padding: 60px 0 40px; }
+    .stats { grid-template-columns: repeat(2, 1fr); margin-bottom: 56px; }
+    .grid { grid-template-columns: 1fr; }
+    .row time { flex-basis: 68px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">Eden<span>.</span></div>
+    <div class="nav-links">
+      <a href="#doing">在做的事</a>
+      <a href="#focus">关注</a>
+      <a href="#log">记录</a>
+      <button class="toggle" id="themeBtn" aria-label="切换主题">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="avatar">E</div>
+    <h1>把长期有价值的事<br><em>一件一件做完。</em></h1>
+    <p class="lead">
+      深圳。互联网运营，业余研究投资与阅读，顺手把看到的东西写成文字。
+      这个页面用来放一些不值得开一个站、但又想留个地址的东西。
+    </p>
+    <div class="tags">
+      <span class="tag">投资研究</span>
+      <span class="tag">阅读笔记</span>
+      <span class="tag">AI 工具</span>
+      <span class="tag">内容创作</span>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b>449</b><small>阅读天数</small></div>
+    <div class="stat"><b>91</b><small>读过的书</small></div>
+    <div class="stat"><b>236</b><small>条笔记</small></div>
+    <div class="stat"><b>137h</b><small>阅读时长</small></div>
+  </div>
+
+  <section id="doing">
+    <div class="sec-title"><h2>正在做的事</h2><i>now</i></div>
+    <div class="grid">
+      <div class="card reveal">
+        <span class="ico">📈</span>
+        <h3>投资体系梳理</h3>
+        <p>把零散读过的投资书整理成一套能用的框架，而不是停留在「读完就忘」。</p>
+      </div>
+      <div class="card reveal">
+        <span class="ico">📚</span>
+        <h3>阅读知识卡片</h3>
+        <p>每本书沉淀 2–3 张核心卡片，把笔记从收藏夹里救出来。</p>
+      </div>
+      <div class="card reveal">
+        <span class="ico">🤖</span>
+        <h3>AI 工作流</h3>
+        <p>把重复的运营动作交给工具做，省下来的时间拿去读点别的。</p>
+      </div>
+      <div class="card reveal">
+        <span class="ico">✍️</span>
+        <h3>内容输出</h3>
+        <p>写一点真的被用过的东西，而不是又一篇「保姆级教程」。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="log">
+    <div class="sec-title"><h2>最近</h2><i>log</i></div>
+    <div class="list">
+      <div class="row reveal">
+        <time>2026.10</time>
+        <div class="body">
+          <h4>这个页面</h4>
+          <p>一个文件、零依赖、托管在 GitHub Pages。想改就改，不用重新部署什么。</p>
+        </div>
+      </div>
+      <div class="row reveal">
+        <time>2026.09</time>
+        <div class="body">
+          <h4>投资类书籍收尾</h4>
+          <p>六本交叉读完，开始做横向对比，比单本摘录有用得多。</p>
+        </div>
+      </div>
+      <div class="row reveal">
+        <time>2026.08</time>
+        <div class="body">
+          <h4>阅读统计脚本</h4>
+          <p>把微信读书的数据拉出来做结构化整理，顺手成了个小工具。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <blockquote class="reveal">
+    「读得多不如记得住，记得住不如用得上。」
+    <footer>—— 给自己的提醒</footer>
+  </blockquote>
+
+  <footer class="site">
+    <span>© <span id="year"></span> Eden · 用 HTML 手写，无框架无依赖</span>
+    <a href="https://pages.github.com/" target="_blank" rel="noopener">Hosted on GitHub Pages</a>
+  </footer>
+
+</div>
+
+<script>
+  // theme
+  var root = document.documentElement;
+  var btn = document.getElementById('themeBtn');
+  var saved = localStorage.getItem('theme');
+  if (saved) {
+    root.setAttribute('data-theme', saved);
+  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    root.setAttribute('data-theme', 'dark');
+  }
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  // reveal on scroll
+  var items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e, i) {
+        if (e.isIntersecting) {
+          var el = e.target;
+          setTimeout(function () { el.classList.add('in'); }, i * 70);
+          io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  } else {
+    items.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  // year
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
